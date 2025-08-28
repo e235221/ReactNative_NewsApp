@@ -2,19 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, Image,} from 'react-native';
 
 
-const NewsKizi = () => {
+const NewsKizi = ({imageuri, title, subText}) => {
 	return(
 
 	<View style={styles.container}>
 
 	  <View style={styles.box}>
 		<View style={styles.moziBox}>
-		  <Text style={styles.text}>これは可愛い犬の画像です。猫を2匹飼っていますが犬も飼いたいです。</Text>
-		  <Text style={styles.subText}>テム</Text>
+		  <Text style={styles.text}>{title}</Text>
+		  <Text style={styles.subText}>{subText}</Text>
 		</View>
 
 		<View style={styles.gazoBox}>
-		  <Image style={{width: 100,height: 100}} source={{url: 'https://picsum.photos/id/237/200/300'}}/>
+		  <Image style={{width: 100,height: 100}} source={{url: imageuri}}/>
 		</View>
 	  </View>
 
