@@ -1,29 +1,55 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import NewsScreen from './screens/NewsScreen';
-import DetailScreen from './screens/DetailScreen';
-
-// function HomeScreen() {
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Text>Home Screen</Text>
-//     </View>
-//   );
-// }
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { FontAwesome } from "@expo/vector-icons";
+import NewsScreen from "./screens/NewsScreen";
+import DetailScreen from "./screens/DetailScreen";
+import WeatherScreen from "./screens/WeatherScreen";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function App() {
+const NewsStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="ニュース" component={NewsScreen} />
+      <Stack.Screen name="詳細ページ" component={DetailScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const WeatherStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="天気予報" component={WeatherScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const screenOption = ({ route }) => ({
+  tabBarIcon: ({ color, size }) => {
+    let iconName;
+	// route.nameタブごとに画像取得
+    if (route.name === "ニュース") {
+		// newspaper-oでニュースアイコン，sun-oで太陽アイコン
+      iconName = "newspaper-o";
+    } else if (route.name === "天気予報") {
+      iconName = "sun-o";
+    }
+
+    // You can return any component that you like here!
+    return <FontAwesome name={iconName} size={size} color={color} />;
+  },
+});
+
+export default App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="ニュース" component={NewsScreen} />
-		<Stack.Screen name="詳細ページ" component={DetailScreen} />
-      </Stack.Navigator>
+      <Tab.Navigator screenOptions={screenOption}>
+        <Tab.Screen name="ニュース" component={NewsStack} />
+        <Tab.Screen name="天気予報" component={WeatherStack} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
-}
-
-export default App; 
+};
