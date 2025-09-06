@@ -4,60 +4,62 @@ import WeatherItem from "../components/WeatherItem";
 import Constants from "expo-constants";
 import axios from "axios";
 
+// APIキーを安全に取得
+const WEATHER_API_KEY =
+  Constants?.expoConfig?.extra?.weatherApiKey ?? "DUMMY_KEY";
 
-console.log(Constants.expoConfig.extra.weatherApiKey); 
-
-//各地域のAPI情報
+// 各地域のAPI情報
 const Hokkaido = {
   name: "北海道",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Asahikawa&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Asahikawa&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Touhoku = {
   name: "東北",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Yamagata&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Yamagata&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Kantou = {
   name: "関東",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Tokyo&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Tokyo&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Hokuriku = {
   name: "北陸",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Nagano&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Nagano&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Toukai = {
   name: "東海",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Nagoya&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Nagoya&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
-const Kinnki = {
+const Kinki = {
   name: "近畿",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Osaka&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Osaka&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
-const Tyugoku = {
+const Chugoku = {
   name: "中国",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Hiroshima&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Hiroshima&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
-const sikoku = {
+const Shikoku = {
   name: "四国",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Matsuyama&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Matsuyama&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Kyusyu = {
   name: "九州",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Ozu&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Ozu&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
 const Okinawa = {
   name: "沖縄",
-  uri: `http://api.openweathermap.org/data/2.5/weather?q=Okinawa&lang=ja&exclude=hourly,minutely&units=metric&&APPID=${Constants.expoConfig.extra.weatherApiKey}`,
+  uri: `https://api.openweathermap.org/data/2.5/weather?q=Okinawa&lang=ja&exclude=hourly,minutely&units=metric&APPID=${WEATHER_API_KEY}`,
 };
-//各地域のAPI情報を配列に格納
+
+// 地域の一覧
 const TotalUri = [
   Hokkaido,
   Touhoku,
   Kantou,
   Hokuriku,
   Toukai,
-  Kinnki,
-  Tyugoku,
-  sikoku,
+  Kinki,
+  Chugoku,
+  Shikoku,
   Kyusyu,
   Okinawa,
 ];
@@ -66,21 +68,24 @@ export default function WeatherScreen() {
   const [weather, setWeathers] = useState([]);
 
   useEffect(() => {
-    //それぞれの地域ごとに天気情報を取得
+    // 各地域ごとに天気情報を取得
     TotalUri.forEach((info) => {
       getWeathers(info);
     });
   }, []);
-  //天気情報を取得
+
+  // 天気情報を取得
   const getWeathers = async (info) => {
-    //APIで非同期処理を実行
-    const response = await axios.get(info.uri);
-    //取得したデータから天気情報を取得
-    const uriData = response.data.weather;
-    //天気情報に地域名を追加
-    uriData[0].name = info.name;
-    //weatherに天気情報・地域名を設定する
-    setWeathers((weather) => [...weather, uriData[0]]);
+    try {
+      const response = await axios.get(info.uri);
+      const uriData = response.data.weather;
+      // 地域名を追加
+      uriData[0].name = info.name;
+      // stateに追加
+      setWeathers((prev) => [...prev, uriData[0]]);
+    } catch (error) {
+      console.error(`天気情報の取得に失敗しました (${info.name}):`, error);
+    }
   };
 
   return (
@@ -94,7 +99,7 @@ export default function WeatherScreen() {
             name={item.name}
           />
         )}
-        keyExtractor={(contact, index) => String(index)}
+        keyExtractor={(item, index) => String(index)}
       />
     </SafeAreaView>
   );
