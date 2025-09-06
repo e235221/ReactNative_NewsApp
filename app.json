@@ -12,10 +12,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
-      "supportsTablet": true
+    "extra": {
+      "newsApiKey": "0f1b0c8e3e8a4326bf31fe14601d515e"
     },
-    "android": {
+    "ios": {
+        "supportsTablet": true
+      },
+      "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
