@@ -2,11 +2,18 @@ import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
 const NewsKizi = ({ imageuri, title, subtext }) => {
+var date = new Date(subtext);
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+var day = date.getDate();
+// 公開日付を変更
+var koukaihiduke = year + '年' + month + '月' + day + '日';
+
   return (
     <View style={styles.box}>
       <View style={styles.moziBox}>
         <Text numberOfLines={3} style={styles.text}>{title}</Text>
-        <Text style={styles.subText}>{subtext}</Text>
+        <Text style={styles.subText}>{koukaihiduke}</Text>
 
       </View>
 
@@ -46,6 +53,6 @@ const styles = StyleSheet.create({
 
   subText: {
     fontSize: 12,
-    color: "red",
+    color: "darkgray",
   },
 });
