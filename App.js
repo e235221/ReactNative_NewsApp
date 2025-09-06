@@ -11,8 +11,7 @@ export default function App() {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-	alert(Constants.expoConfig.extra.newsApiKey) // 修正: Constants.manifest2.extra を Constants.expoConfig.extra に変更
-    // getNews();
+    getNews();
   }, []);
 
   const getNews = async () => {
@@ -21,6 +20,7 @@ export default function App() {
     console.log(response);
   };
 
+  
   return (
     <View style={styles.container}>
       <FlatList
