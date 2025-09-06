@@ -1,45 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList, SafeAreaView } from "react-native";
-import NewsKizi from "./components/NewsKizi";
-import Constants from "expo-constants";
-import axios from "axios";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import NewsScreen from './screens/NewsScreen';
+import DetailScreen from './screens/DetailScreen';
 
-// 英語のニュース記事を取得するように変更
-const URI = `https://newsapi.org/v2/top-headlines?country=us&category=entertainment&apiKey=${Constants.expoConfig.extra.newsApiKey}`; // 修正: Constants.manifest.extra を Constants.expoConfig.extra に変更
+// function HomeScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Home Screen</Text>
+//     </View>
+//   );
+// }
 
-export default function App() {
-  const [news, setNews] = useState([]);
+const Stack = createStackNavigator();
 
-  useEffect(() => {
-    getNews();
-  }, []);
-
-  const getNews = async () => {
-    const response = await axios.get(URI);
-    setNews(response.data.articles);
-    console.log(response);
-  };
-
+function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={news}
-        renderItem={({ item }) => (
-          <NewsKizi
-            imageuri={item.urlToImage}
-            title={item.title}
-            subtext={item.publishedAt}
-          />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="ニュース" component={NewsScreen} />
+		<Stack.Screen name="詳細ページ" component={DetailScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
+export default App; 
