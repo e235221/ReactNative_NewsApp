@@ -20,7 +20,7 @@ var koukaihiduke = year + '年' + month + '月' + day + '日';
 
 
       <TouchableOpacity style={styles.gazoBox}>
-        <Image style={{ width: 100, height: 100 }} source={{ url: imageuri }} />
+        <Image style={{ width: 100, height: 100 }} source={{ uri: imageuri }} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
